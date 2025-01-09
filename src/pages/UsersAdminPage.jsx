@@ -67,6 +67,7 @@ export const UsersAdminPage = () => {
                                 <option value="administrador">Administrador</option>
                                 <option value="gerente">Gerente</option>
                                 <option value="bodega">Bodega</option>
+                                <option value="caja">Caja</option>
                             </select>
                         </div>
                         <div className="flex justify-center space-x-4 mt-9">
