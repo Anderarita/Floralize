@@ -34,12 +34,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const isAdmin = hasRole("Admin"); // Verifica si el usuario tiene rol de admin
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
-  };
-
   const handleNavigate = (path) => {
     navigate(path);
     if (window.innerWidth < 768) {
@@ -85,15 +79,13 @@ const Sidebar = () => {
               title={"Inicio"}
             />
 
-            {isAdmin && (
-              <>
-                <NavItem
-                  icon={<GoFile />}
-                  onClick={() => handleNavigate("/inventory")}
-                  open={open}
-                  title={"Inventario"}
-                />
-              </>
+            {(hasRole("Admin") || hasRole("Inventario")) && (
+              <NavItem
+                icon={<GoFile />}
+                onClick={() => handleNavigate("/inventory")}
+                open={open}
+                title={"Inventario"}
+              />
             )}
             <NavItem
               icon={<GoCalendar />}
@@ -117,7 +109,7 @@ const Sidebar = () => {
         <ul className="mt-auto">
           <NavItem
             icon={<CiLogout />}
-            onClick={handleLogout}
+            onClick={logout}
             open={open}
             title={"Cerrar Sesión"}
           />

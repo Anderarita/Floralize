@@ -77,7 +77,7 @@ export const routes = [
   {
     path: "/inventory",
     element: (
-      <RoleBasedRoute roles={["Admin"]}>
+      <RoleBasedRoute roles={["Admin", "Inventario"]}>
         <InventoryAdminPage />
       </RoleBasedRoute>
     ),

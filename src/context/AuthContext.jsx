@@ -31,6 +31,10 @@ export const AuthProvider = ({ children }) => {
           name: decodedToken[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
           ],
+          username:
+            decodedToken[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+            ],
         });
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -67,6 +71,10 @@ export const AuthProvider = ({ children }) => {
       name: decodedToken[
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
       ],
+      username:
+        decodedToken[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        ],
     });
     return response.data;
   };

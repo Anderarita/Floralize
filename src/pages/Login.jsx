@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../context/AuthContext";
-import PetalosBackground from "../../styles/PetalosBackground";
+// import PetalosBackground from "../../styles/PetalosBackground";
 
 // Esquema de validación para el inicio de sesión
 const loginSchema = Yup.object().shape({
@@ -21,7 +21,9 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
-    const loadingToast = toast.loading("Iniciando sesión...");
+    const loadingToast = toast.loading("Iniciando sesión...", {
+      position: "top-center",
+    });
     try {
       // Llama a la función login del contexto de autenticación
       const response = await login(values);
@@ -29,7 +31,8 @@ export default function Login() {
         localStorage.setItem("token", response.token); // Guarda el token en localStorage
         toast.success("¡Bienvenido de vuelta!", {
           id: loadingToast,
-          duration: 3000,
+          position: "top-center",
+          icon: "✅",
         });
         navigate("/", { replace: true }); // Redirige al usuario a la página principal
       }
@@ -47,6 +50,7 @@ export default function Login() {
       } else {
         toast.error(errorMessage, {
           id: loadingToast,
+          position: "top-center",
         });
       }
     } finally {

@@ -1,22 +1,22 @@
-import { useSearchParams } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import toast from 'react-hot-toast';
-import { useAuth } from '../context/AuthContext';
-import { useState } from 'react';
+import { useSearchParams } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
 
 const resetPasswordSchema = Yup.object().shape({
   newPassword: Yup.string()
-    .min(6, 'La contraseña debe tener al menos 6 caracteres')
-    .required('La nueva contraseña es requerida'),
+    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .required("La nueva contraseña es requerida"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'Las contraseñas deben coincidir')
-    .required('Confirma tu contraseña'),
+    .oneOf([Yup.ref("newPassword"), null], "Las contraseñas deben coincidir")
+    .required("Confirma tu contraseña"),
 });
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
   const { resetPassword } = useAuth();
   const [submitted, setSubmitted] = useState(false);
 
@@ -36,10 +36,20 @@ export default function ResetPassword() {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await resetPassword(token, values.newPassword);
-      toast.success('Contraseña actualizada exitosamente. Puedes cerrar esta página.');
+      toast.success(
+        "Contraseña actualizada exitosamente. Puedes cerrar esta página.",
+        {
+          position: "top-center",
+        }
+      );
       setSubmitted(true); // Cambiar el estado a "enviado"
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Error al restablecer la contraseña');
+      toast.error(
+        error.response?.data?.message || "Error al restablecer la contraseña",
+        {
+          position: "top-center",
+        }
+      );
     } finally {
       setSubmitting(false);
     }
@@ -49,7 +59,9 @@ export default function ResetPassword() {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-900">Contraseña restablecida</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Contraseña restablecida
+          </h2>
           <p className="text-gray-600">
             Tu contraseña ha sido restablecida. Ahora puedes cerrar esta página.
           </p>
@@ -67,7 +79,7 @@ export default function ResetPassword() {
           </h2>
         </div>
         <Formik
-          initialValues={{ newPassword: '', confirmPassword: '' }}
+          initialValues={{ newPassword: "", confirmPassword: "" }}
           validationSchema={resetPasswordSchema}
           onSubmit={handleSubmit}
         >
@@ -75,7 +87,10 @@ export default function ResetPassword() {
             <Form className="mt-8 space-y-6">
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="newPassword"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Nueva contraseña
                   </label>
                   <Field
@@ -85,12 +100,17 @@ export default function ResetPassword() {
                     className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   />
                   {errors.newPassword && touched.newPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.newPassword}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.newPassword}
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Confirmar contraseña
                   </label>
                   <Field
@@ -100,7 +120,9 @@ export default function ResetPassword() {
                     className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   />
                   {errors.confirmPassword && touched.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.confirmPassword}
+                    </p>
                   )}
                 </div>
               </div>
@@ -111,7 +133,7 @@ export default function ResetPassword() {
                   disabled={isSubmitting}
                   className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
                 >
-                  {isSubmitting ? 'Actualizando...' : 'Actualizar contraseña'}
+                  {isSubmitting ? "Actualizando..." : "Actualizar contraseña"}
                 </button>
               </div>
             </Form>

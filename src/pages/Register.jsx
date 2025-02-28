@@ -32,7 +32,9 @@ export default function Register() {
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    const loadingToast = toast.loading("Registrando...");
+    const loadingToast = toast.loading("Registrando...", {
+      position: "top-center",
+    });
     try {
       if (!termsAccepted) {
         throw new Error(
@@ -44,7 +46,7 @@ export default function Register() {
       await register(values);
       toast.success("Registro exitoso", {
         id: loadingToast,
-        duration: 3000,
+        position: "top-center",
       });
       navigate("/login"); // Redirige al usuario a la página de inicio de sesión
     } catch (error) {
@@ -54,6 +56,7 @@ export default function Register() {
       );
       toast.error(error.response?.data?.message || error.message, {
         id: loadingToast,
+        position: "top-center",
       });
     } finally {
       setSubmitting(false);

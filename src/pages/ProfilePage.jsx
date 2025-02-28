@@ -11,7 +11,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (user) {
-      setUsername(user.name || "");
+      setUsername(user.username || "");
       setEmail(user.email || "");
     }
   }, [user]);

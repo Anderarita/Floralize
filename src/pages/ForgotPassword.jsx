@@ -19,19 +19,22 @@ export default function ForgotPassword() {
   const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    const loadingToast = toast.loading("Enviando instrucciones...");
+    const loadingToast = toast.loading("Enviando instrucciones...", {
+      position: "top-center",
+    });
     try {
       await forgotPassword(values.email);
       setSubmitted(true);
       toast.success("Se han enviado las instrucciones a tu correo", {
         id: loadingToast,
-        duration: 3000,
+        position: "top-center",
       });
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Error al procesar la solicitud",
         {
           id: loadingToast,
+          position: "top-center",
         }
       );
     } finally {

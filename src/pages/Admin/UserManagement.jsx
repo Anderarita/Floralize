@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-hot-toast';
-import { roleService } from '../../services/roleService';
-import { FiPlus, FiSearch, FiTag, FiTrash, FiUser, FiUserPlus } from 'react-icons/fi';
-import { MdOutlineAssignmentInd } from 'react-icons/md';
-import { LiaUserShieldSolid } from 'react-icons/lia';
+import React, { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
+import { roleService } from "../../services/roleService";
+import {
+  FiPlus,
+  FiSearch,
+  FiTag,
+  FiTrash,
+  FiUser,
+  FiUserPlus,
+} from "react-icons/fi";
+import { MdOutlineAssignmentInd } from "react-icons/md";
+import { LiaUserShieldSolid } from "react-icons/lia";
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedRole, setSelectedRole] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // Nuevo estado para la búsqueda
+  const [selectedRole, setSelectedRole] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // Nuevo estado para la búsqueda
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +30,10 @@ export default function UserManagement() {
         setUsers(usersResponse);
         setRoles(rolesResponse);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error('Error al cargar los datos');
+        console.error("Error fetching data:", error);
+        toast.error("Error al cargar los datos", {
+          position: "top-center",
+        });
       } finally {
         setLoading(false);
       }
@@ -35,32 +44,42 @@ export default function UserManagement() {
 
   const handleAssignRole = async () => {
     if (!selectedUser || !selectedRole) {
-      toast.error('Por favor selecciona un usuario y un rol');
+      toast.error("Por favor selecciona un usuario y un rol", {
+        position: "top-center",
+      });
       return;
     }
 
     try {
       await roleService.assignRole(selectedUser.id, parseInt(selectedRole));
-      toast.success('Rol asignado exitosamente');
-      setSelectedRole('');
+      toast.success("Rol asignado exitosamente", {
+        position: "top-center",
+      });
+      setSelectedRole("");
       setSelectedUser(null);
       const updatedUsers = await roleService.getUsersWithRoles();
       setUsers(updatedUsers);
     } catch (error) {
-      console.error('Error assigning role:', error);
-      toast.error(error.response?.data || 'Error al asignar el rol');
+      console.error("Error assigning role:", error);
+      toast.error(error.response?.data || "Error al asignar el rol", {
+        position: "top-center",
+      });
     }
   };
 
   const handleRemoveRole = async (userId, roleId) => {
     try {
       await roleService.removeRole(userId, roleId);
-      toast.success('Rol removido exitosamente');
+      toast.success("Rol removido exitosamente", {
+        position: "top-center",
+      });
       const updatedUsers = await roleService.getUsersWithRoles();
       setUsers(updatedUsers);
     } catch (error) {
-      console.error('Error removing role:', error);
-      toast.error(error.response?.data || 'Error al remover el rol');
+      console.error("Error removing role:", error);
+      toast.error(error.response?.data || "Error al remover el rol", {
+        position: "top-center",
+      });
     }
   };
 
@@ -109,9 +128,11 @@ export default function UserManagement() {
             </label>
             <select
               className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
-              value={selectedUser?.id || ''}
+              value={selectedUser?.id || ""}
               onChange={(e) => {
-                const user = users.find((u) => u.id === parseInt(e.target.value));
+                const user = users.find(
+                  (u) => u.id === parseInt(e.target.value)
+                );
                 setSelectedUser(user);
               }}
             >
@@ -125,7 +146,9 @@ export default function UserManagement() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Rol</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Rol
+            </label>
             <select
               className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
               value={selectedRole}
@@ -160,10 +183,18 @@ export default function UserManagement() {
           <table className="min-w-full divide-y divide-gray-300">
             <thead className="bg-gray-50">
               <tr>
-                <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">Usuario</th>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Roles</th>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Acciones</th>
+                <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
+                  Usuario
+                </th>
+                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Email
+                </th>
+                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Roles
+                </th>
+                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
@@ -172,7 +203,9 @@ export default function UserManagement() {
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                     {user.firstName} {user.lastName}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{user.email}</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {user.email}
+                  </td>
                   <td className="px-3 py-4 text-sm text-gray-500">
                     <div className="flex flex-wrap gap-2">
                       {user.roles.map((role) => (
@@ -192,7 +225,7 @@ export default function UserManagement() {
                         onClick={() => handleRemoveRole(user.id, role.id)}
                         className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-800 hover:bg-red-200 items-center mr-2 inline-flex"
                       >
-                        <FiTrash className='mr-2' /> {role.name}
+                        <FiTrash className="mr-2" /> {role.name}
                       </button>
                     ))}
                   </td>
