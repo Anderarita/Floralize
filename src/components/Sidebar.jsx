@@ -134,7 +134,7 @@ import { IoHomeOutline } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthProvider";
 import { RiFlowerFill } from "react-icons/ri";
 
 export const NavItem = ({ icon, title, onClick, open }) => (

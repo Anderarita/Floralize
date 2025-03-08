@@ -4,131 +4,61 @@ import fondo from '../components/image/Imagen.jpg';
 export const LoginPage = () => {
   const navigate = useNavigate();
 
-  const styles = {
-    pageContainer: {
-      position: "relative",
-      minHeight: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      overflow: "hidden",
-    },
-    imageContainer: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      backgroundImage: `url(${fondo})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      zIndex: -1, // Imagen detrás del formulario
-    },
-    loginContainer: {
-      background: "rgba(255, 255, 255, 0.0)", // Fondo más transparente
-      padding: "40px",
-      borderRadius: "10px",
-      //boxShadow: "0 0 20px rgba(0, 0, 0, 0.2)",
-      width: "100%",
-      maxWidth: "400px",
-      textAlign: "center",
-    },
-    heading: {
-      color: "#333",
-      marginBottom: "30px",
-      fontSize: "24px",
-      fontWeight: "bold",
-    },
-    inputGroup: {
-      marginBottom: "20px",
-      textAlign: "left",
-    },
-    label: {
-      display: "block",
-      marginBottom: "5px",
-      color: "#333",
-    },
-    input: {
-      width: "100%",
-      padding: "10px",
-      border: "none",
-      borderBottom: "1px solid #9a5ea7",
-      boxSizing: "border-box",
-      background: "rgba(255, 255, 255, 0.0)",
-    },
-    button: {
-      background: "#8e44ad",
-      color: "white",
-      border: "none",
-      padding: "12px 30px",
-      borderRadius: "5px",
-      cursor: "pointer",
-      fontSize: "16px",
-      marginTop: "10px",
-    },
-    buttonHover: {
-      background: "#732d91",
-    },
-    links: {
-      marginTop: "20px",
-    },
-    link: {
-      color: "#8e44ad",
-      textDecoration: "none",
-      fontSize: "14px",
-    },
-    linkHover: {
-      textDecoration: "underline",
-    },
-  };
-
   return (
-    <div style={styles.pageContainer}>
+    <div className="relative min-h-screen flex justify-center items-center overflow-hidden">
       {/* Imagen de fondo */}
-      <div style={styles.imageContainer}></div>
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${fondo})` }}
+      ></div>
 
       {/* Formulario de inicio de sesión */}
-      <div style={styles.loginContainer}>
-        <h1 style={styles.heading}>Inicio de Sesión</h1>
-        <div style={styles.inputGroup}>
-          <label htmlFor="usuario" style={styles.label}>
+      <div className="bg-white/80 px-10 py-8 rounded-lg max-w-sm text-center shadow-lg backdrop-blur-sm">
+        <h1 className="text-gray-800 text-2xl font-bold mb-6">Inicio de Sesión</h1>
+
+        {/* Campo Usuario */}
+        <div className="mb-4 text-left">
+          <label htmlFor="usuario" className="block text-gray-700 mb-1">
             Usuario:
           </label>
           <input
             type="text"
             id="usuario"
             name="usuario"
-            style={styles.input}
+            className="w-full px-3 py-2 border-b border-purple-600 bg-transparent focus:outline-none focus:border-purple-800 transition-colors"
           />
         </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="contrasena" style={styles.label}>
+
+        {/* Campo Contraseña */}
+        <div className="mb-6 text-left">
+          <label htmlFor="contrasena" className="block text-gray-700 mb-1">
             Contraseña:
           </label>
           <input
             type="password"
             id="contrasena"
             name="contrasena"
-            style={styles.input}
+            className="w-full px-3 py-2 border-b border-purple-600 bg-transparent focus:outline-none focus:border-purple-800 transition-colors"
           />
         </div>
+
+        {/* Botón Ingresar */}
         <button
           type="button"
-          style={styles.button}
+          className="w-full bg-purple-700 text-white py-2 rounded-md font-semibold hover:bg-purple-800 transition-colors"
           onClick={() => navigate("/HomePage")}
         >
           Ingresar
         </button>
-        <div style={styles.links}>
-          <a href="/Recover" style={styles.link}>
+
+        {/* Enlaces */}
+        <div className="mt-5">
+          <a href="/Recover" className="text-purple-600 text-sm hover:underline">
             ¿Olvidaste tu contraseña?
           </a>
           <br />
-          <span style={{ color: "#666", fontSize: "14px" }}>
-            ¿No tienes una cuenta?{" "}
-          </span>
-          <a href="/Register" style={styles.link}>
+          <span className="text-gray-600 text-sm">¿No tienes una cuenta? </span>
+          <a href="/Register" className="text-purple-600 text-sm hover:underline">
             Regístrate
           </a>
         </div>
@@ -136,3 +66,4 @@ export const LoginPage = () => {
     </div>
   );
 };
+
