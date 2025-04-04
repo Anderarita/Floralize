@@ -1,0 +1,178 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+import { jwtDecode } from "jwt-decode";
+
+const API_URL = "https://localhost:7227/api/Detalle/cliente/"; // URL de la API
+const API_URL2 = "https://localhost:7227/api/personalido/cliente/";
+
+export const OrdersPage = () => {
+  const [orders, setOrders] = useState([]); // Estado para almacenar detalles de pedidos
+  const [ordersCustom, setOrdersCustom] = useState([]); // Estado para almacenar pedidos perzonalizados
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [clienteId, setClienteId] = useState(null);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setClienteId(
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ] || decodedToken.id
+        );
+      } catch (error) {
+        console.error("Error al decodificar el token:", error);
+      }
+      console.log(clienteId);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!clienteId) return; // Esperar hasta que clienteId esté disponible
+      try {
+        const response = await axios.get(`${API_URL}${clienteId}`);
+        if (response.data.status) {
+          setOrders(response.data.data); // Extraer solo la data
+        } else {
+          setError("No se pudieron obtener los pedidos");
+        }
+      } catch (err) {
+        setError("Error al cargar los pedidos");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [clienteId]);
+
+  const fetchOrdersCustom = async () => {
+    if (!clienteId) return; // Esperar hasta que clienteId esté disponible
+    try {
+      const response = await axios.get(`${API_URL2}${clienteId}`);
+      if (response.data.status) {
+        setOrdersCustom(response.data.data); // Extraer solo la data
+      } else {
+        setError("No se pudieron obtener los pedidos");
+      }
+    } catch (err) {
+      setError("Error al cargar los pedidos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchOrdersCustom(); // Llamar a la función para obtener pedidos personalizados
+  useEffect(() => {
+    fetchOrdersCustom();
+  }, [clienteId]);
+
+
+  return (
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header />
+        <div className="p-6">
+          <h2 className="text-2xl font-bold mb-4 text-center">
+            Lista de Pedidos
+          </h2>
+
+          {loading ? (
+            <p>Cargando pedidos...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : orders.length === 0 ? (
+            <p>No hay detalles de pedidos disponibles</p>
+          ) : (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">Producto</th>
+                  <th className="border border-gray-300 px-4 py-2">Cantidad</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Precio Unitario
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id} className="text-center">
+                    <td className="border border-gray-300 px-4 py-2">
+                      {order.productoNombre}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {order.cantidad}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {order.precioUnitario} LPS
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {order.total} LPS
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        <div>
+          <h3 className="text-2xl font-bold mb-4 text-center">
+            Lista de Pedidos Personalizados
+          </h3>
+
+          {loading ? (
+            <p>Cargando pedidos personalizados...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : ordersCustom.length === 0 ? (
+            <p>No hay detalles de pedidos personalizados disponibles</p>
+          ) : (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">
+                    Tipo de Flor
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Cantidad</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Incluye Presente
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Incluye Base
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Tipo de Presente
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Tipo de Base
+                  </th> 
+                </tr>
+              </thead>
+              <tbody>
+                {ordersCustom.map((order) => (
+                  <tr key={order.id} className="text-center">
+                    <td className="border border-gray-300 px-4 py-2">{order.tipoFlor}</td>
+                          <td className="border border-gray-300 px-4 py-2">{order.cantidad}</td>
+                          <td className="border border-gray-300 px-4 py-2">{order.incluirPresente}</td>
+                          <td className="border border-gray-300 px-4 py-2">{order.incluirBase}</td>
+                          <td className="border border-gray-300 px-4 py-2">{order.tipoPresente}</td>
+                          <td className="border border-gray-300 px-4 py-2">{order.tipoBase}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
