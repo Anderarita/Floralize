@@ -5,10 +5,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../context/AuthContext";
-<<<<<<< HEAD
-import fondo from "../components/Image/Imagen.jpg"
-=======
->>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
+import fondo from "../components/Image/Imagen.jpg";
 // import PetalosBackground from "../../styles/PetalosBackground";
 
 // Esquema de validación para el inicio de sesión
@@ -66,21 +63,15 @@ export default function Login() {
     <div className="relative min-h-screen flex justify-center items-center overflow-hidden">
       {/* Fondo de partículas */}
 
-<<<<<<< HEAD
-      <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${fondo})` }}>
-      </div>
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${fondo})` }}
+      ></div>
 
       {/* Formulario de inicio de sesión */}
       <div className="bg-white/80 px-10 py-8 rounded-lg max-w-sm text-center shadow-lg backdrop-blur-sm">
         {/* <PetalosBackground /> */}
         <h1 className="text-gray-800 text-2xl font-bold mb-6">
-=======
-      {/* Formulario de inicio de sesión */}
-      <div className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-full max-w-md text-center z-10">
-        {/* <PetalosBackground /> */}
-        <h1 className="text-2xl font-bold text-gray-800 mb-8">
->>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
           Iniciar Sesión
         </h1>
         <Formik
@@ -91,11 +82,7 @@ export default function Login() {
           {({ errors, touched, isSubmitting, values }) => (
             <Form>
               <div className="mb-6 text-left">
-<<<<<<< HEAD
                 <label htmlFor="username" className="block text-gray-700 mb-1">
-=======
-                <label htmlFor="username" className="block text-gray-800 mb-2">
->>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
                   Usuario:
                 </label>
                 <Field
@@ -111,11 +98,7 @@ export default function Login() {
               </div>
 
               <div className="mb-6 text-left">
-<<<<<<< HEAD
                 <label htmlFor="password" className="block text-gray-700 mb-1">
-=======
-                <label htmlFor="password" className="block text-gray-800 mb-2">
->>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
                   Contraseña:
                 </label>
                 <div className="relative">

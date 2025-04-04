@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -377,18 +376,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-=======
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-
-export default function Dashboard() {
-  return (
-    <div className="flex">
-      <Sidebar />
-      <div className="flex-1 relative">
-        <Header />
-      </div>
-    </div>
-  );
-}
->>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
