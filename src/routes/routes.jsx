@@ -4,11 +4,14 @@ import PublicRoute from "./PublicRoute";
 import RoleBasedRoute from "../components/RoleBasedRoute";
 import { InventoryAdminPage } from "../pages/Admin/InventoryAdminPage";
 import ProfilePage from "../pages/ProfilePage";
+<<<<<<< HEAD
 import { OrdersCustomers } from "../pages/OrdersCustomersPage";
 import AdminHomePage from "../pages/Admin/AdminHomePage";
 import { OrdersPage } from "../pages/OrdersPage";
 import { OrdersAdminPage } from "../pages/Admin/OrdersAdminPage";
 import { SuppliersAdminPage } from "../pages/Admin/SuppliersAdminPage";
+=======
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -18,7 +21,10 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const UserManagement = lazy(() => import("../pages/Admin/UserManagement"));
 const TermsAndPrivacy = lazy(() => import("../pages/TermsAndPrivacy"));
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
 export const routes = [
   {
     path: "/terms",
@@ -81,6 +87,7 @@ export const routes = [
     ),
   },
   {
+<<<<<<< HEAD
     path: "/Suppliers",
     element: (
       <RoleBasedRoute roles={["Admin"]}>
@@ -97,6 +104,8 @@ export const routes = [
     ),
   },
   {
+=======
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
     path: "/inventory",
     element: (
       <RoleBasedRoute roles={["Admin", "Inventario"]}>
@@ -104,6 +113,7 @@ export const routes = [
       </RoleBasedRoute>
     ),
   },
+<<<<<<< HEAD
   {
     path: "/ordersCustomers",
     element: (
@@ -128,4 +138,6 @@ export const routes = [
       </RoleBasedRoute>     
     ),
   },
+=======
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
 ];

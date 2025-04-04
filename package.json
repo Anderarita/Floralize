@@ -14,8 +14,12 @@
     "@emotion/styled": "^11.14.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+<<<<<<< HEAD
     "@mui/icons-material": "^7.0.1",
     "@mui/material": "^7.0.1",
+=======
+    "@mui/material": "^6.4.6",
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
     "@tailwindcss/postcss": "^4.0.9",
     "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.8.1",

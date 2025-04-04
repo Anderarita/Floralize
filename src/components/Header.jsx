@@ -26,7 +26,11 @@ const Header = () => {
   }, []);
 
   return (
+<<<<<<< HEAD
     <header className="bg-[#9a5ea7] p-4 top-2  flex items-center justify-between w-full rounded-lg shadow-lg relative">
+=======
+    <header className="bg-[#9a5ea7] p-4 flex items-center justify-between w-full rounded-lg shadow-lg relative">
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
       <h1 className="text-white text-4xl font-bold font-dancing">Floralize</h1>
 
       <div className="relative" ref={menuRef}>

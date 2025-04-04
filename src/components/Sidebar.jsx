@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoArrowLeft, GoCalendar, GoPerson, GoFile } from "react-icons/go";
+<<<<<<< HEAD
 import { FaHandshake } from "react-icons/fa";
+=======
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
 import { IoHomeOutline } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import { RiFlowerFill } from "react-icons/ri";
@@ -33,8 +36,12 @@ const Sidebar = () => {
   const { user, hasRole, logout } = useAuth();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
+<<<<<<< HEAD
   const isAdmin = hasRole("Admin"); 
   const isUser = hasRole("User"); 
+=======
+  const isAdmin = hasRole("Admin"); // Verifica si el usuario tiene rol de admin
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -76,6 +83,7 @@ const Sidebar = () => {
           <ul>
             <NavItem
               icon={<IoHomeOutline />}
+<<<<<<< HEAD
               onClick={() => handleNavigate("/adminHome")}
               open={open}
               title={"Inicio"}
@@ -98,6 +106,13 @@ const Sidebar = () => {
             )}
 
             {/* Mostrar el elemento de inventario solo si el usuario tiene el rol de Admin o Inventario */}
+=======
+              onClick={() => handleNavigate("/")}
+              open={open}
+              title={"Inicio"}
+            />
+
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
             {(hasRole("Admin") || hasRole("Inventario")) && (
               <NavItem
                 icon={<GoFile />}
@@ -106,6 +121,7 @@ const Sidebar = () => {
                 title={"Inventario"}
               />
             )}
+<<<<<<< HEAD
 
             {!isAdmin && (
               <NavItem
@@ -115,6 +131,14 @@ const Sidebar = () => {
                 title={"Personalizados"}
               />
             )}
+=======
+            <NavItem
+              icon={<GoCalendar />}
+              onClick={() => handleNavigate("/Orders")}
+              open={open}
+              title={"Pedidos"}
+            />
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
             {isAdmin && (
               <>
                 <NavItem
@@ -125,6 +149,7 @@ const Sidebar = () => {
                 />
               </>
             )}
+<<<<<<< HEAD
             {isAdmin && (
               <NavItem
                 icon={<FaHandshake />}
@@ -133,6 +158,8 @@ const Sidebar = () => {
                 title={"Proveedores"}
               />
             )}
+=======
+>>>>>>> df7ea71c90c0769c48ea175eb5d7bf9678bcc01e
           </ul>
         </nav>
 
