@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import axios from "axios";
+import api from "../../config/api";
 
 export const SuppliersAdminPage = () => {
   const [nombre, setNombre] = useState("");
@@ -11,12 +11,11 @@ export const SuppliersAdminPage = () => {
   const [proveedores, setProveedores] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
 
-  const API_URL = "https://localhost:7227/api/proveedor";
 
   
   const fetchProveedores = async () => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await api.get("/proveedor");
       console.log("Proveedores:", response.data);
       setProveedores(response.data.data);
     } catch (error) {
@@ -34,7 +33,7 @@ export const SuppliersAdminPage = () => {
     const proveedorData = { nombre, telefono, correo, direccion };
 
     try {
-      await axios.post(API_URL, proveedorData);
+      await api.post("/proveedor", proveedorData);
       alert("Proveedor creado con éxito!");
       fetchProveedores(); // Refrescar la lista de proveedores
       setNombre("");
@@ -56,8 +55,14 @@ export const SuppliersAdminPage = () => {
     if (!confirmacion) return;
 
     try {
-      await axios.delete(`${API_URL}/${id}`);
+      const response = await api.delete(`/proveedor/${id}`);
+      console.log("Proveedor eliminado:", response.data);
+      if (response.data && response.data.status) {
       alert("Proveedor eliminado con éxito!");
+      await fetchProveedores();
+      } else {
+        alert(response.data?.message || "Error al eliminar la proveedores");
+      }
       fetchProveedores(); // Actualizar la lista después de eliminar
     } catch (error) {
       alert("Error al eliminar el proveedor");
@@ -76,7 +81,7 @@ export const SuppliersAdminPage = () => {
           {/* Botón para abrir el modal */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="mb-6 p-3 bg-green-500 text-white rounded-md"
+            className="mb-6 p-3 bg-[#EC75D6] hover:bg-[#fa6fe0] font-bold  text-white  rounded-md"
           >
             Crear Proveedor
           </button>
@@ -171,7 +176,7 @@ export const SuppliersAdminPage = () => {
                       <td className="border p-3 text-center">
                         <button
                           onClick={() => handleEliminarProveedor(proveedor.id)}
-                          className="bg-red-500 text-white px-4 py-2 rounded-md"
+                          className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-800 hover:bg-red-200 items-center mr-2 inline-flex"
                         >
                           Eliminar
                         </button>

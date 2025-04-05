@@ -6,7 +6,6 @@ import Card from "../../components/Card";
 import api from "../../config/api";
 import toast from "react-hot-toast";
 
-// const API_URL = 'https://localhost:7227/api';
 
 // Componente para el Modal de Detalles
 const ProductDetailModal = ({ isOpen, onClose, product, onEdit, onDelete }) => {

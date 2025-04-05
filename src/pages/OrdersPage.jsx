@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { jwtDecode } from "jwt-decode";
+import api from "../config/api"; 
 
-const API_URL = "https://localhost:7227/api/Detalle/cliente/"; // URL de la API
-const API_URL2 = "https://localhost:7227/api/personalido/cliente/";
 
 export const OrdersPage = () => {
   const [orders, setOrders] = useState([]); // Estado para almacenar detalles de pedidos
@@ -36,7 +34,7 @@ export const OrdersPage = () => {
     const fetchOrders = async () => {
       if (!clienteId) return; // Esperar hasta que clienteId esté disponible
       try {
-        const response = await axios.get(`${API_URL}${clienteId}`);
+        const response = await api.get(`/Detalle/cliente/${clienteId}`);
         if (response.data.status) {
           setOrders(response.data.data); // Extraer solo la data
         } else {
@@ -55,7 +53,7 @@ export const OrdersPage = () => {
   const fetchOrdersCustom = async () => {
     if (!clienteId) return; // Esperar hasta que clienteId esté disponible
     try {
-      const response = await axios.get(`${API_URL2}${clienteId}`);
+      const response = await api.get(`/personalido/cliente/${clienteId}`);
       if (response.data.status) {
         setOrdersCustom(response.data.data); // Extraer solo la data
       } else {

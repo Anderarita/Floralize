@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import api from "../../config/api";
 
-// const API_URL = "https://localhost:7227/api/pedido";
-// const API_URL2 = "https://localhost:7227/api/Detalle";
-// const API_URL_PERSONALIZADO = "https://localhost:7227/api/personalido";
 
 export const OrdersAdminPage = () => {
   const [orders, setOrders] = useState([]);

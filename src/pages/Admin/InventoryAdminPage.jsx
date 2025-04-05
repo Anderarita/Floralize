@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import api from "../../config/api";
@@ -319,7 +319,7 @@ export const InventoryAdminPage = () => {
               setDescripcion("");
               setIsCategoriaModalOpen(true);
             }}
-            className="mb-6 p-3 bg-[#9a5ea7] text-white rounded-md"
+            className="mb-6 p-3 bg-[#EC75D6] hover:bg-[#fa6fe0] font-bold  text-white  rounded-md"
           >
             Crear Categoría
           </button>
@@ -345,13 +345,13 @@ export const InventoryAdminPage = () => {
                       <td className="border p-3 text-center space-x-2">
                         <button
                           onClick={() => handleEditarCategoria(categoria)}
-                          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                          className="rounded bg-blue-100 px-4 py-2 text-xs font-medium text-blue-800 hover:bg-blue-200 items-center mr-2 inline-flex"
                         >
                           Editar
                         </button>
                         <button
                           onClick={() => handleEliminarCategoria(categoria.id)}
-                          className="bg-red-500 text-white px-4 py-2 rounded-md"
+                          className="rounded bg-red-100 px-4 py-2 text-xs font-medium text-red-800 hover:bg-red-200 items-center mr-2 inline-flex"
                         >
                           Eliminar
                         </button>
@@ -376,7 +376,7 @@ export const InventoryAdminPage = () => {
               resetInventarioForm();
               setIsInventarioModalOpen(true);
             }}
-            className="mb-6 p-3 bg-[#9a5ea7] text-white rounded-md"
+            className="mb-6 p-3 bg-[#EC75D6] hover:bg-[#fa6fe0] font-bold  text-white  rounded-md"
           >
             Crear Inventario
           </button>
@@ -567,7 +567,7 @@ export const InventoryAdminPage = () => {
                         <td className="border p-3 text-center space-x-2">
                           <button
                             onClick={() => handleEditarInventario(inventario)}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                            className="rounded bg-blue-100 px-4 py-2 text-xs font-medium text-blue-800 hover:bg-blue-200 items-center mr-2 inline-flex"
                           >
                             Editar
                           </button>
@@ -575,7 +575,7 @@ export const InventoryAdminPage = () => {
                             onClick={() =>
                               handleEliminarInventario(inventario.id)
                             }
-                            className="bg-red-500 text-white px-4 py-2 rounded-md"
+                            className="rounded bg-red-100 px-4 py-2 text-xs font-medium text-red-800 hover:bg-red-200 items-center mr-2 inline-flex"
                           >
                             Eliminar
                           </button>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import api from '../config/api';
 
 export const OrdersCustomers = () => {
     const [flowerType, setFlowerType] = useState('');
@@ -68,7 +68,7 @@ export const OrdersCustomers = () => {
         formData.append('UserId', clienteId);
 
         try {
-            const response = await axios.post('https://localhost:7227/api/personalido', formData, {
+            const response = await api.post('/personalido', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
