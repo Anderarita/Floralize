@@ -10,6 +10,7 @@ export const InventoryAdminPage = () => {
   const [ubicacion, setUbicacion] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [inventarios, setInventarios] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [isCategoriaModalOpen, setIsCategoriaModalOpen] = useState(false);
   const [isInventarioModalOpen, setIsInventarioModalOpen] = useState(false);
   const [categoriaEdit, setCategoriaEdit] = useState(null);
@@ -56,9 +57,25 @@ export const InventoryAdminPage = () => {
     }
   };
 
+  //Obtener Productos
+  const fetchProductos = async () => {
+    try {
+      const response = await api.get("/producto");
+      console.log("Respuesta de productos:", response.data);
+      // Ajuste según la estructura real de tu respuesta
+      if (response.data && response.data.status) {
+        setProductos(response.data.data || []);
+      }
+    } catch (error) {
+      console.error("Error al obtener productos", error);
+      alert(error.response?.data?.message || "Error al obtener productos");
+    }
+  };
+
   useEffect(() => {
     fetchCategorias();
     fetchInventarios();
+    fetchProductos();
   }, []);
 
   // Crear categoría
@@ -593,6 +610,44 @@ export const InventoryAdminPage = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Lista de Productos */}
+          <div className="bg-white shadow-md rounded-lg p-6 mt-12">
+            <h3 className="text-lg font-bold text-4xl mb-4 text-center">Lista de Productos</h3>
+            <table className="w-full border-collapse border border-gray-200">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border p-3 text-left">Nombre</th>
+                  <th className="border p-3 text-left">Descripcion</th>
+                  <th className="border p-3 text-left">Precio</th>
+                  <th className="border p-3 text-left">Categoría</th>
+                  <th className="border p-3 text-center">Stock</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productos.length > 0 ? (
+                  productos.map((productos) => {
+                    return (
+                      <tr key={productos.id} className="hover:bg-gray-50">
+                        <td className="border p-3">{productos.nombre}</td>
+                        <td className="border p-3">{productos.descripcion}</td>
+                        <td className="border p-3">{productos.precio}</td>
+                        <td className="border p-3">{productos.categoria}</td>
+                        <td className="border p-3">{productos.stock}</td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="border p-3 text-center">
+                      No hay inventarios registrados.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </div>

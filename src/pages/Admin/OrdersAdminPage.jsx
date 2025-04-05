@@ -125,6 +125,7 @@ export const OrdersAdminPage = () => {
             api.get(`/pedido/?includeDetails=true`),
             api.get("/Detalle"),
             api.get("/personalido"),
+            api.get("/producto")
           ]);
 
         // Verificar y limpiar datos de pedidos regulares
