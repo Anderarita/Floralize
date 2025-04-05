@@ -159,9 +159,9 @@ export default function UserManagement() {
               <div className="flex items-end">
                 <button
                   onClick={handleAssignRole}
-                  className="rounded-md bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 flex items-center"
+                  className="rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm bg-[#EC75D6] hover:bg-[#fa6fe0] focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 flex items-center"
                 >
-                  <FiUserPlus className="mr-2" /> Asignar Rol
+                  <FiUserPlus className="mr-2 " /> Asignar Rol
                 </button>
               </div>
             </div>

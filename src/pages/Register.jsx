@@ -16,6 +16,10 @@ const registerSchema = Yup.object().shape({
     .email("Email inválido")
     .required("El email es requerido")
     .trim(),
+  address: Yup.string()
+    .required("La direccion es requerida")
+    .min(3, "La dirreccion debe tener al menos 3 caracteres")
+    .trim(),
   password: Yup.string()
     .min(6, "La contraseña debe tener al menos 6 caracteres")
     .required("La contraseña es requerida"),
@@ -74,6 +78,7 @@ export default function Register() {
           initialValues={{
             username: "",
             email: "",
+            address: "",
             password: "",
             firstName: "",
             lastName: "",
@@ -147,6 +152,22 @@ export default function Register() {
                 />
                 {errors.email && touched.email && (
                   <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                )}
+              </div>
+
+              <div className="mb-6 text-left">
+                <label htmlFor="address" className="block text-gray-800 mb-2">
+                  Direccion:
+                </label>
+                <Field
+                  id="address"
+                  name="address"
+                  type="address"
+                  className="w-full px-3 py-2 border-b border-purple-600 bg-transparent focus:outline-none focus:border-purple-800 transition-colors"
+                  disabled={isSubmitting}
+                />
+                {errors.address && touched.address && (
+                  <p className="text-red-500 text-xs mt-1">{errors.address}</p>
                 )}
               </div>
 

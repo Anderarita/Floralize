@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Card from "../../components/Card";
 import api from "../../config/api";
+import toast from "react-hot-toast";
 
 // const API_URL = 'https://localhost:7227/api';
 
@@ -86,14 +87,22 @@ const ProductDetailModal = ({ isOpen, onClose, product, onEdit, onDelete }) => {
           </button>
 
           <button
-            onClick={() => {
-              if (
-                window.confirm(
-                  "¿Estás seguro que deseas eliminar este producto?"
-                )
-              ) {
-                onDelete(product.id);
-                onClose();
+            onClick={async () => {
+              const confirmed = window.confirm(
+                "¿Estás seguro que deseas eliminar este producto?"
+              );
+              if (confirmed) {
+                try {
+                  await onDelete(product.id);
+                  onClose();
+                  toast.success("Producto eliminado correctamente", {
+                    position: "top-center",
+                  });
+                } catch (error) {
+                  toast.error("Error al eliminar el producto", {
+                    position: "top-center",
+                  });
+                }
               }
             }}
             className="px-4 py-2 bg-[#c145aa] hover:bg-[#c156ad] text-white rounded-md"
@@ -119,6 +128,7 @@ const AdminHomePage = () => {
   const [cards, setCards] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [proveedores, setProveedores] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [newCard, setNewCard] = useState({
     id: null,
     nombre: "",
@@ -155,6 +165,7 @@ const AdminHomePage = () => {
   // Cargar tarjetas desde la API
   useEffect(() => {
     fetchCards();
+    fetchCategorias();
   }, []);
 
   // Cargar proveedores
@@ -187,61 +198,61 @@ const AdminHomePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let dataToSend;
+    let headers = {};
+
+    if (newCard.file) {
+      const formData = new FormData();
+      formData.append("file", newCard.file);
+      formData.append("nombre", newCard.nombre);
+      formData.append("descripcion", newCard.descripcion);
+      formData.append("precio", newCard.precio);
+      formData.append("categoria", newCard.categoria);
+      formData.append("stock", newCard.stock);
+      formData.append("proveedorId", newCard.proveedorId);
+
+      dataToSend = formData;
+      headers["Content-Type"] = "multipart/form-data";
+    } else {
+      dataToSend = {
+        nombre: newCard.nombre,
+        descripcion: newCard.descripcion,
+        precio: newCard.precio,
+        categoria: newCard.categoria,
+        stock: newCard.stock,
+        proveedorId: newCard.proveedorId,
+      };
+      headers["Content-Type"] = "application/json";
+    }
     try {
       if (newCard.id) {
-        // Actualizar producto (PUT) - Sin imagen
-        const updateData = {
-          nombre: newCard.nombre,
-          descripcion: newCard.descripcion,
-          precio: newCard.precio,
-          categoria: newCard.categoria,
-          stock: newCard.stock,
-          proveedorId: newCard.proveedorId,
-        };
-        await api.put(`/producto/${newCard.id}`, updateData);
-      } else {
-        // Crear producto (POST) - Con imagen
-        const formData = new FormData();
-        formData.append("File", newCard.file); // Nota: "File" con mayúscula para coincidir con el backend
-        formData.append("Nombre", newCard.nombre);
-        formData.append("Descripcion", newCard.descripcion);
-        formData.append("Precio", newCard.precio);
-        formData.append("Categoria", newCard.categoria);
-        formData.append("Stock", newCard.stock);
-        formData.append("ProveedorId", newCard.proveedorId);
-
-        await api.post("/producto", formData, {
-          headers: {
-            // Axios establece automáticamente el Content-Type como multipart/form-data
-            // cuando se usa FormData, no es necesario especificarlo
-          },
+        // Editar producto (PUT)
+        await api.put(`/producto/${newCard.id}`, dataToSend, {
+          headers,
         });
+      } else {
+        // Crear producto (POST)
+        await api.post("/producto", dataToSend, { headers });
       }
-
       await fetchCards();
-      setShowModal(false);
-      resetForm();
-    } catch (error) {
-      console.error("Error al procesar el producto:", {
-        message: error.message,
-        response: error.response?.data,
-      });
-      alert(error.response?.data?.message || "Error al procesar el producto");
-    }
-  };
 
-  // Función para resetear el formulario
-  const resetForm = () => {
-    setNewCard({
-      id: null,
-      nombre: "",
-      descripcion: "",
-      precio: 0,
-      categoria: "",
-      file: null,
-      stock: 0,
-      proveedorId: "",
-    });
+      setShowModal(false);
+      setNewCard({
+        id: null,
+        nombre: "",
+        descripcion: "",
+        precio: 0,
+        categoria: "",
+        file: null,
+        stock: 0,
+        proveedorId: "",
+      });
+    } catch (error) {
+      console.error(
+        "Error al agregar o editar la tarjeta:",
+        error.response?.data || error.message
+      );
+    }
   };
 
   // Manejador para abrir el modal de detalles
@@ -262,6 +273,18 @@ const AdminHomePage = () => {
     }
     setActionModalOpen(false);
     setDetailModalOpen(false);
+  };
+
+  // Obtiene las categorias
+  const fetchCategorias = async () => {
+    try {
+      const response = await api.get("/categoria");
+      if (response.data && Array.isArray(response.data.data)) {
+        setCategorias(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error al obtener las categorías:", error);
+    }
   };
 
   // Manejador para eliminar
@@ -297,7 +320,7 @@ const AdminHomePage = () => {
                   proveedorId: "",
                 });
               }}
-              className="bg-[#EC75D6] hover:bg-[#fa6fe0] text-white p-2 rounded-full shadow-md transition-colors duration-200"
+              className="bg-[#EC75D6] hover:bg-[#fa6fe0] text-white p-4 rounded-full shadow-md transition-colors duration-200 fixed bottom-9 right-15 z-30"
             >
               <FaPlus className="text-3xl" />
             </button>
@@ -401,14 +424,29 @@ const AdminHomePage = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Categoría:
                       </label>
-                      <input
-                        type="text"
+                      <select
                         name="categoria"
                         value={newCard.categoria}
                         onChange={handleChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                      />
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white"
+                      >
+                        <option value="">Seleccionar categoría</option>
+                        {categorias.length > 0 ? (
+                          categorias.map((categoria) => (
+                            <option
+                              key={categoria.id}
+                              value={categoria.descripcion}
+                            >
+                              {categoria.descripcion}
+                            </option>
+                          ))
+                        ) : (
+                          <option disabled>
+                            No hay categorías disponibles
+                          </option>
+                        )}
+                      </select>
                     </div>
 
                     <div>
