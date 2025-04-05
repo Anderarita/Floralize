@@ -303,8 +303,8 @@ const AdminHomePage = () => {
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
-        <div className="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10">
-          <div className="flex justify-end items-center mb-6">
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10 mt-3">
+          <div className="flex justify-end items-center mb-1"> 
             <button
               onClick={() => {
                 setShowModal(true);

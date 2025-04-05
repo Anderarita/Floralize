@@ -3,7 +3,7 @@ import React from "react";
 const Card = ({ nombre, precio, imagenUrl, onClick }) => {
   return (
     <div
-      className="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1 transition-transform"
+      className="w-64 bg-gray-200 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1 transition-transform"
       onClick={onClick}
     >
       <div className="h-48 overflow-hidden">
