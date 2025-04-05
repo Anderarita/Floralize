@@ -72,9 +72,10 @@ export const OrdersAdminPage = () => {
         )
       );
 
+      // Cambiar la URL a la correcta
       const response = await api.put(
-        `/Detalle/${orderId}/estado`,
-        { estado: newStatus },
+        `/personalido/${orderId}/estado`,
+        newStatus, // Enviar solo el string del estado
         {
           headers: {
             "Content-Type": "application/json",
@@ -98,9 +99,9 @@ export const OrdersAdminPage = () => {
             ? { ...order, estado: order.estado || "Pendiente" }
             : order
         )
-      );
-    }
-  };
+      );
+    }
+  };
 
   // Función para ver detalles del pedido regular
   const viewOrderDetails = (order) => {

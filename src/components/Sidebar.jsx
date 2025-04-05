@@ -36,8 +36,8 @@ const Sidebar = () => {
   const isAdmin = hasRole("Admin");
   const isUser = hasRole("User");
   const isInvetori = hasRole("Inventario");
-  const isGerente = hasRole("Gerente");
   const isVendedor = hasRole("Vendedor");
+  const isGerente = hasRole("Gerente");
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -77,16 +77,14 @@ const Sidebar = () => {
 
         <nav className="flex-grow mt-20">
           <ul>
-            {(hasRole("Admin") || hasRole("Gerente")) || hasRole("Vendedor")&& (
+            
             <NavItem
               icon={<IoHomeOutline />}
               onClick={() => handleNavigate("/adminHome")}
               open={open}
               title={"Inicio"}
             />
-            )}
-
-            {!isAdmin || !isVendedor&& (
+            {isAdmin || !isGerente && (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/orders")}
@@ -94,7 +92,7 @@ const Sidebar = () => {
                 title={"Pedidos"}
               />
             )}
-            {(hasRole("Admin")|| hasRole("Gerente")|| hasRole("Vendedor")) && (
+            {(hasRole("Admin") || hasRole("Vendedor")) && (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/OrdersAdmin")}
@@ -113,7 +111,7 @@ const Sidebar = () => {
               />
             )}
 
-            {!isAdmin || !isInvetori && (
+            { isUser && (
               <NavItem
                 icon={<GoPerson />}
                 onClick={() => handleNavigate("/ordersCustomers")}
@@ -131,7 +129,7 @@ const Sidebar = () => {
                 />
               </>
             )}
-            {isAdmin || isInvetori || isGerente && (
+            {(hasRole("Admin") || hasRole("Inventario")) && (
               <NavItem
                 icon={<FaHandshake />}
                 onClick={() => handleNavigate("/Suppliers")}

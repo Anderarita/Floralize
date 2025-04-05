@@ -98,7 +98,7 @@ export const routes = [
   {
     path: "/inventory",
     element: (
-      <RoleBasedRoute roles={["Admin", "Inventario"]}>
+      <RoleBasedRoute roles={["Admin", "Inventario", "Gerente"]}>
         <InventoryAdminPage />
       </RoleBasedRoute>
     ),
@@ -114,15 +114,15 @@ export const routes = [
   {
     path: "/orders",
     element: (
-      <PrivateRoute>
+      <RoleBasedRoute roles={["User"]}>
         <OrdersPage />
-      </PrivateRoute>
+      </RoleBasedRoute>
     ),
   },
   {
     path: "/adminHome",
     element: (
-      <RoleBasedRoute roles={["Admin", "Gerente"]}>
+      <RoleBasedRoute roles={["Admin", "Gerente", "Vendedor"]}>
         <AdminHomePage />
       </RoleBasedRoute>
     ),
