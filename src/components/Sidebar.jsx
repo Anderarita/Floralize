@@ -35,6 +35,9 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const isAdmin = hasRole("Admin");
   const isUser = hasRole("User");
+  const isInvetori = hasRole("Inventario");
+  const isGerente = hasRole("Gerente");
+  const isVendedor = hasRole("Vendedor");
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -74,13 +77,16 @@ const Sidebar = () => {
 
         <nav className="flex-grow mt-20">
           <ul>
+            {(hasRole("Admin") || hasRole("Gerente")) || hasRole("Vendedor")&& (
             <NavItem
               icon={<IoHomeOutline />}
               onClick={() => handleNavigate("/adminHome")}
               open={open}
               title={"Inicio"}
             />
-            {!isAdmin && (
+            )}
+
+            {!isAdmin || !isVendedor&& (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/orders")}
@@ -88,7 +94,7 @@ const Sidebar = () => {
                 title={"Pedidos"}
               />
             )}
-            {!isUser && (
+            {(hasRole("Admin")|| hasRole("Gerente")|| hasRole("Vendedor")) && (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/OrdersAdmin")}
@@ -98,7 +104,7 @@ const Sidebar = () => {
             )}
 
             {/* Mostrar el elemento de inventario solo si el usuario tiene el rol de Admin o Inventario */}
-            {(hasRole("Admin") || hasRole("Inventario")) && (
+            {(hasRole("Admin") || hasRole("Inventario") || hasRole("Gerente")) && (
               <NavItem
                 icon={<GoFile />}
                 onClick={() => handleNavigate("/inventory")}
@@ -107,7 +113,7 @@ const Sidebar = () => {
               />
             )}
 
-            {!isAdmin && (
+            {!isAdmin || !isInvetori && (
               <NavItem
                 icon={<GoPerson />}
                 onClick={() => handleNavigate("/ordersCustomers")}
@@ -125,7 +131,7 @@ const Sidebar = () => {
                 />
               </>
             )}
-            {isAdmin && (
+            {isAdmin || isInvetori || isGerente && (
               <NavItem
                 icon={<FaHandshake />}
                 onClick={() => handleNavigate("/Suppliers")}

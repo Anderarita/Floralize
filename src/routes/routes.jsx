@@ -90,7 +90,7 @@ export const routes = [
   {
     path: "/OrdersAdmin",
     element: (
-      <RoleBasedRoute roles={["Admin"]}>
+      <RoleBasedRoute roles={["Admin", "Gerente", "Vendedor"]}>
         <OrdersAdminPage />
       </RoleBasedRoute>
     ),
@@ -122,7 +122,7 @@ export const routes = [
   {
     path: "/adminHome",
     element: (
-      <RoleBasedRoute roles={["Admin"]}>
+      <RoleBasedRoute roles={["Admin", "Gerente"]}>
         <AdminHomePage />
       </RoleBasedRoute>
     ),
