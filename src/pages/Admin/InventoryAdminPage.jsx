@@ -185,7 +185,7 @@ export const InventoryAdminPage = () => {
           <div className="flex justify-between items-center">
             <button
               type="submit"
-              className="w-full p-3 bg-blue-500 text-white rounded-md"
+              className="w-full p-3 bg-blue-400 hover:bg-blue-500 text-white rounded-md"
             >
               {categoriaEdit ? "Actualizar" : "Crear"} Categoría
             </button>
@@ -362,7 +362,7 @@ export const InventoryAdminPage = () => {
                       <td className="border p-3 text-center space-x-2">
                         <button
                           onClick={() => handleEditarCategoria(categoria)}
-                          className="rounded bg-blue-100 px-4 py-2 text-xs font-medium text-blue-800 hover:bg-blue-200 items-center mr-2 inline-flex"
+                          className="rounded bg-blue-100 hover:bg-blue-200 px-4 py-2 text-xs font-medium text-blue-800  items-center mr-2 inline-flex"
                         >
                           Editar
                         </button>
@@ -455,7 +455,7 @@ export const InventoryAdminPage = () => {
                   <div className="flex justify-between items-center">
                     <button
                       type="submit"
-                      className="w-full p-3 bg-blue-500 text-white rounded-md"
+                      className="w-full p-3 bg-blue-400 hover:bg-blue-500 text-white rounded-md"
                     >
                       Crear Inventario
                     </button>
