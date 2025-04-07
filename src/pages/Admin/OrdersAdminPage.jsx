@@ -5,7 +5,6 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import api from "../../config/api";
 
-
 export const OrdersAdminPage = () => {
   const [orders, setOrders] = useState([]);
   const [customOrders, setCustomOrders] = useState([]);
@@ -16,6 +15,22 @@ export const OrdersAdminPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [activeTab, setActiveTab] = useState("regular");
+
+  // Función para obtener el color según el estado
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Pendiente":
+        return "bg-yellow-100 text-yellow-800";
+      case "En Proceso":
+        return "bg-blue-100 text-blue-800";
+      case "Completado":
+        return "bg-green-100 text-green-800";
+      case "Cancelado":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
 
   // Función para formatear moneda
   const formatCurrency = (amount) => {
@@ -45,37 +60,16 @@ export const OrdersAdminPage = () => {
   // Función para cambiar el estado del pedido regular
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const response = await api.put(`/pedido/${orderId}/estado`, {
-        estado: newStatus,
-      });
-
-      if (response.data.status) {
-        setOrders(
-          orders.map((order) =>
-            order.id === orderId ? { ...order, estado: newStatus } : order
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error al actualizar el estado:", error);
-      setError("Error al actualizar el estado del pedido");
-    }
-  };
-
-  // Función para cambiar el estado del pedido personalizado - Versión corregida
-  const handleCustomStatusChange = async (orderId, newStatus) => {
-    try {
       // Actualización optimista
-      setCustomOrders((prev) =>
-        prev.map((order) =>
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
           order.id === orderId ? { ...order, estado: newStatus } : order
         )
       );
 
-      // Cambiar la URL a la correcta
       const response = await api.put(
-        `/personalido/${orderId}/estado`,
-        newStatus, // Enviar solo el string del estado
+        `/pedido/${orderId}/estado`,
+        { estado: newStatus }, // Envía como objeto JSON
         {
           headers: {
             "Content-Type": "application/json",
@@ -93,15 +87,79 @@ export const OrdersAdminPage = () => {
       setError(error.message);
 
       // Revertir cambio si falla
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, estado: order.estado } : order
+        )
+      );
+    }
+  };
+
+  // Función para cambiar el estado del pedido personalizado
+  const handleCustomStatusChange = async (orderId, newStatus) => {
+    try {
+      // Validar estado antes de enviar
+      if (
+        !newStatus ||
+        !["Pendiente", "En Proceso", "Completado", "Cancelado"].includes(
+          newStatus
+        )
+      ) {
+        throw new Error("Estado no válido");
+      }
+
+      // Actualización optimista con estado temporal
       setCustomOrders((prev) =>
         prev.map((order) =>
           order.id === orderId
-            ? { ...order, estado: order.estado || "Pendiente" }
+            ? { ...order, estado: "Actualizando...", tempEstado: newStatus }
             : order
         )
-      );
-    }
-  };
+      );
+
+      // Enviar el estado como string JSON válido
+      const response = await api.put(
+        `/personalido/${orderId}/estado`,
+        JSON.stringify(newStatus),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.data.status) {
+        throw new Error(response.data.message || "Error al actualizar estado");
+      }
+
+      // Actualizar con los datos reales del servidor
+      setCustomOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderId
+            ? { ...response.data.data, tempEstado: undefined }
+            : order
+        )
+      );
+
+      setError(null);
+    } catch (error) {
+      console.error("Error al actualizar estado:", error);
+      setError(error.message);
+
+      // Revertir cambio y mostrar estado anterior
+      setCustomOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderId
+            ? {
+                ...order,
+                estado: order.estado || "Pendiente",
+                tempEstado: undefined,
+              }
+            : order
+        )
+      );
+    }
+  };
 
   // Función para ver detalles del pedido regular
   const viewOrderDetails = (order) => {
@@ -126,7 +184,6 @@ export const OrdersAdminPage = () => {
             api.get(`/pedido/?includeDetails=true`),
             api.get("/Detalle"),
             api.get("/personalido"),
-            api.get("/producto")
           ]);
 
         // Verificar y limpiar datos de pedidos regulares
@@ -159,6 +216,8 @@ export const OrdersAdminPage = () => {
               ...order,
               fechaPedido: order.fechaPedido || new Date().toISOString(),
               estado: order.estado || "Pendiente",
+              incluirPresente: order.incluirPresente || "No",
+              incluirBase: order.incluirBase || "No",
             }))
           : [];
 
@@ -214,7 +273,7 @@ export const OrdersAdminPage = () => {
             </div>
 
             {/* Panel de estadísticas */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
               <div className="bg-white rounded-lg shadow p-4">
                 <h3 className="text-gray-500 text-sm font-medium">
                   Total Pedidos
@@ -242,8 +301,8 @@ export const OrdersAdminPage = () => {
                 </h3>
                 <p className="text-2xl font-bold text-blue-600">
                   {activeTab === "regular"
-                    ? orders.filter((o) => o.estado === "EnProceso").length
-                    : customOrders.filter((o) => o.estado === "EnProceso")
+                    ? orders.filter((o) => o.estado === "En Proceso").length
+                    : customOrders.filter((o) => o.estado === "En Proceso")
                         .length}
                 </p>
               </div>
@@ -255,6 +314,17 @@ export const OrdersAdminPage = () => {
                   {activeTab === "regular"
                     ? orders.filter((o) => o.estado === "Completado").length
                     : customOrders.filter((o) => o.estado === "Completado")
+                        .length}
+                </p>
+              </div>
+              <div className="bg-white rounded-lg shadow p-4">
+                <h3 className="text-gray-500 text-sm font-medium">
+                  Cancelados
+                </h3>
+                <p className="text-2xl font-bold text-red-600">
+                  {activeTab === "regular"
+                    ? orders.filter((o) => o.estado === "Cancelado").length
+                    : customOrders.filter((o) => o.estado === "Cancelado")
                         .length}
                 </p>
               </div>
@@ -315,21 +385,18 @@ export const OrdersAdminPage = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <select
-                              value={order.estado}
+                              value={order.estado || "Pendiente"}
                               onChange={(e) =>
                                 handleStatusChange(order.id, e.target.value)
                               }
-                              className={`block w-full px-3 py-1 rounded-md text-sm font-medium cursor-pointer ${
-                                order.estado === "Completado"
-                                  ? "bg-green-100 text-green-800"
-                                  : order.estado === "EnProceso"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : "bg-yellow-100 text-yellow-800"
-                              }`}
+                              className={`block w-full px-3 py-1 rounded-md text-sm font-medium cursor-pointer ${getStatusColor(
+                                order.estado
+                              )}`}
                             >
                               <option value="Pendiente">Pendiente</option>
-                              <option value="EnProceso">En Proceso</option>
+                              <option value="En Proceso">En Proceso</option>
                               <option value="Completado">Completado</option>
+                              <option value="Cancelado">Cancelado</option>
                             </select>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
@@ -354,6 +421,9 @@ export const OrdersAdminPage = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Fecha
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Tipo de Flor
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -370,6 +440,9 @@ export const OrdersAdminPage = () => {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {customOrders.map((order) => (
                         <tr key={order.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {formatDate(order.fechaPedido)}
+                          </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 capitalize">
                             {order.tipoFlor || "No especificado"}
                           </td>
@@ -386,17 +459,24 @@ export const OrdersAdminPage = () => {
                                 )
                               }
                               className={`block w-full px-3 py-1 rounded-md text-sm font-medium cursor-pointer ${
-                                order.estado === "Completado"
-                                  ? "bg-green-100 text-green-800"
-                                  : order.estado === "EnProceso"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : "bg-yellow-100 text-yellow-800"
+                                order.estado === "Actualizando..."
+                                  ? "bg-gray-100 text-gray-800"
+                                  : getStatusColor(
+                                      order.estado || order.tempEstado
+                                    )
                               }`}
+                              disabled={order.estado === "Actualizando..."}
                             >
                               <option value="Pendiente">Pendiente</option>
-                              <option value="EnProceso">En Proceso</option>
+                              <option value="En Proceso">En Proceso</option>
                               <option value="Completado">Completado</option>
+                              <option value="Cancelado">Cancelado</option>
                             </select>
+                            {order.estado === "Actualizando..." && (
+                              <span className="text-xs text-gray-500">
+                                Actualizando...
+                              </span>
+                            )}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <button
@@ -457,7 +537,7 @@ export const OrdersAdminPage = () => {
                   </div>
                   <div>
                     <h4 className="text-sm font-medium text-gray-500">
-                      Direccion
+                      Dirección
                     </h4>
                     <p className="mt-1 text-sm text-gray-900">
                       {selectedOrder.direccion}
@@ -506,11 +586,6 @@ export const OrdersAdminPage = () => {
                                   Cantidad: {detalle.cantidad}
                                 </p>
                               </div>
-                              <p className="text-sm font-semibold text-gray-900">
-                                {formatCurrency(
-                                  detalle.precio * detalle.cantidad
-                                )}
-                              </p>
                             </div>
                           </li>
                         ))}
@@ -567,33 +642,43 @@ export const OrdersAdminPage = () => {
                   </button>
                 </div>
 
-                <div className="mt-6 grid grid-cols-2 md:grid-cols-2 gap-6">
-                  {/* Información básica */}
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
                       <h4 className="text-sm font-medium text-gray-500">
                         Cliente
                       </h4>
-                      <p className="mt-1 text-sm text-gray-900 font-mono">
+                      <p className="mt-1 text-sm text-gray-900">
                         {selectedCustomOrder.nombreCliente}
                       </p>
                     </div>
                     <div>
                       <h4 className="text-sm font-medium text-gray-500">
-                        Direccion
+                        Dirección
                       </h4>
-                      <p className="mt-1 text-sm text-gray-900 font-mono">
+                      <p className="mt-1 text-sm text-gray-900">
                         {selectedCustomOrder.direccion}
                       </p>
                     </div>
                     <div>
                       <h4 className="text-sm font-medium text-gray-500">
-                        Telefono
+                        Teléfono
                       </h4>
-                      <p className="mt-1 text-sm text-gray-900 font-mono">
+                      <p className="mt-1 text-sm text-gray-900">
                         {selectedCustomOrder.telefono}
                       </p>
                     </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-500">
+                        Fecha del Pedido
+                      </h4>
+                      <p className="mt-1 text-sm text-gray-900">
+                        {formatDate(selectedCustomOrder.fechaPedido)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
                     <div>
                       <h4 className="text-sm font-medium text-gray-500">
                         Tipo de Flor
@@ -602,73 +687,58 @@ export const OrdersAdminPage = () => {
                         {selectedCustomOrder.tipoFlor || "No especificado"}
                       </p>
                     </div>
-
                     <div>
                       <h4 className="text-sm font-medium text-gray-500">
                         Cantidad
                       </h4>
                       <p className="mt-1 text-sm text-gray-900">
-                        {selectedCustomOrder.cantidad || "No especificado"}
+                        {selectedCustomOrder.cantidad}
                       </p>
                     </div>
-
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-500">
-                        Incluir Presente
-                      </h4>
-                      <p className="mt-1 text-sm text-gray-900 capitalize">
-                        {selectedCustomOrder.incluirPresente ||
-                          "No especificado"}
-                      </p>
-                    </div>
-
-                    {selectedCustomOrder.incluirPresente === "si" && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-500">
-                          Tipo de Presente
-                        </h4>
-                        <p className="mt-1 text-sm text-gray-900 capitalize">
-                          {selectedCustomOrder.tipoPresente ||
-                            "No especificado"}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Información adicional */}
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-500">
-                        Incluir Base
-                      </h4>
-                      <p className="mt-1 text-sm text-gray-900 capitalize">
-                        {selectedCustomOrder.incluirBase || "No especificado"}
-                      </p>
-                    </div>
-
-                    {selectedCustomOrder.incluirBase === "si" && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-500">
-                          Tipo de Base
-                        </h4>
-                        <p className="mt-1 text-sm text-gray-900 capitalize">
-                          {selectedCustomOrder.tipoBase || "No especificado"}
-                        </p>
-                      </div>
-                    )}
-
                     <div>
                       <h4 className="text-sm font-medium text-gray-500">
                         Estado
                       </h4>
-                      <p className="mt-1 text-sm text-gray-900 capitalize">
+                      <p
+                        className={`mt-1 text-sm px-2 py-1 rounded-md inline-block ${getStatusColor(
+                          selectedCustomOrder.estado
+                        )}`}
+                      >
                         {selectedCustomOrder.estado || "Pendiente"}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Imagen de referencia */}
+                <div className="mt-6 space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">
+                      Incluir Presente:{" "}
+                      {selectedCustomOrder.incluirPresente === "Si"
+                        ? "Sí"
+                        : "No"}
+                    </h4>
+                    {selectedCustomOrder.incluirPresente === "Si" && (
+                      <p className="mt-1 text-sm text-gray-900">
+                        Tipo:{" "}
+                        {selectedCustomOrder.tipoPresente || "No especificado"}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">
+                      Incluir Base:{" "}
+                      {selectedCustomOrder.incluirBase === "Si" ? "Sí" : "No"}
+                    </h4>
+                    {selectedCustomOrder.incluirBase === "Si" && (
+                      <p className="mt-1 text-sm text-gray-900">
+                        Tipo:{" "}
+                        {selectedCustomOrder.tipoBase || "No especificado"}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
                 <div className="mt-6">
                   <h4 className="text-sm font-medium text-gray-500 mb-2">
                     Imagen de Referencia

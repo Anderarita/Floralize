@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
-import PetalosBackground from "../../styles/PetalosBackground";
+import fondo from "../components/Image/Imagen.jpg";
 
 // Esquema de validación para el registro
 const registerSchema = Yup.object().shape({
@@ -69,9 +69,12 @@ export default function Register() {
 
   return (
     <div className="relative min-h-screen flex justify-center items-center overflow-hidden">
-      <div className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-full max-w-md text-center z-10">
-        <PetalosBackground />
-        <h1 className="text-2xl font-bold text-gray-800 mb-8">
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${fondo})` }}
+      ></div>
+      <div className="bg-white/80 px-16 py-5 rounded-lg max-w-sm text-center shadow-lg backdrop-blur-sm">
+        <h1 className="text-gray-800 text-2xl font-bold mb-6">
           Crear una cuenta
         </h1>
         <Formik

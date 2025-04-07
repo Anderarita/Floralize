@@ -4,7 +4,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
-import PetalosBackground from "../../styles/PetalosBackground";
+import fondo from "../components/Image/Imagen.jpg";
 
 const forgotPasswordSchema = Yup.object().shape({
   email: Yup.string()
@@ -45,9 +45,12 @@ export default function ForgotPassword() {
   if (submitted) {
     return (
       <div className="relative min-h-screen flex justify-center items-center overflow-hidden">
-        <PetalosBackground />
-        <div className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-full max-w-md text-center z-10">
-          <h2 className="text-2xl font-bold text-gray-800 mb-8">
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${fondo})` }}
+        ></div>
+        <div className="bg-white/80 px-16 py-5 rounded-lg max-w-sm text-center shadow-lg backdrop-blur-sm">
+          <h2 className="text-gray-800 text-2xl font-bold mb-6">
             Revisa tu correo
           </h2>
           <p className="text-gray-600 mb-6">
@@ -67,9 +70,12 @@ export default function ForgotPassword() {
 
   return (
     <div className="relative min-h-screen flex justify-center items-center overflow-hidden">
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${fondo})` }}
+      ></div>
       <div className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-full max-w-md text-center z-10">
         <h1 className="text-2xl font-bold text-gray-800 mb-8">
-          <PetalosBackground />
           Recuperar contraseña
         </h1>
         <Formik

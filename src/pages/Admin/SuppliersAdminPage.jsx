@@ -135,7 +135,7 @@ export const SuppliersAdminPage = () => {
                   <div className="flex justify-between items-center">
                     <button
                       type="submit"
-                      className="w-full p-3 bg-blue-500 text-white rounded-md"
+                      className="w-full p-3 bg-[#EC75D6] hover:bg-[#fa6fe0] text-white rounded-md"
                     >
                       Crear Proveedor
                     </button>

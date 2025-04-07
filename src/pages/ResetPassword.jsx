@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import fondo from "../components/Image/Imagen.jpg";
 
 const resetPasswordSchema = Yup.object().shape({
   newPassword: Yup.string()
@@ -71,8 +72,12 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
+    <div className="relative min-h-screen flex justify-center items-center overflow-hidden">
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${fondo})` }}
+      ></div>
+      <div className="bg-white/80 px-8 py-8 rounded-lg max-w-sm text-center shadow-lg backdrop-blur-sm">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Restablecer contraseña
