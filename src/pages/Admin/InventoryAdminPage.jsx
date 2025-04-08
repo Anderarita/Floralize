@@ -23,7 +23,6 @@ export const InventoryAdminPage = () => {
   const fetchCategorias = async () => {
     try {
       const response = await api.get("/categoria");
-      console.log("Respuesta de categorías:", response.data);
 
       // Ajuste según la estructura real de tu respuesta
       if (response.data && response.data.status) {
@@ -42,7 +41,6 @@ export const InventoryAdminPage = () => {
   const fetchInventarios = async () => {
     try {
       const response = await api.get("/Inventario");
-      console.log("Respuesta de inventarios:", response.data);
 
       // Ajuste según la estructura real de tu respuesta
       if (response.data && response.data.status) {
@@ -61,7 +59,6 @@ export const InventoryAdminPage = () => {
   const fetchProductos = async () => {
     try {
       const response = await api.get("/producto");
-      console.log("Respuesta de productos:", response.data);
       // Ajuste según la estructura real de tu respuesta
       if (response.data && response.data.status) {
         setProductos(response.data.data || []);

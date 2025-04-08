@@ -69,7 +69,7 @@ export default function Login() {
       ></div>
 
       {/* Formulario de inicio de sesión */}
-      <div className="bg-white/80 px-10 py-8 rounded-lg max-w-sm text-center shadow-lg backdrop-blur-sm">
+      <div className="bg-white/80 px-10 py-5 rounded-lg max-w-sm text-center shadow-lg backdrop-blur-sm">
         {/* <PetalosBackground /> */}
         <h1 className="text-gray-800 text-2xl font-bold mb-6">
           Iniciar Sesión

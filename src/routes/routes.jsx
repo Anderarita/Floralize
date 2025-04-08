@@ -58,9 +58,9 @@ export const routes = [
   {
     path: "/",
     element: (
-      <PrivateRoute>
+      <RoleBasedRoute roles={["User"]}>
         <Dashboard />
-      </PrivateRoute>
+      </RoleBasedRoute>
     ),
   },
   {
@@ -90,7 +90,7 @@ export const routes = [
   {
     path: "/OrdersAdmin",
     element: (
-      <RoleBasedRoute roles={["Admin", "Gerente", "Vendedor"]}>
+      <RoleBasedRoute roles={["Admin"]}>
         <OrdersAdminPage />
       </RoleBasedRoute>
     ),
@@ -98,7 +98,7 @@ export const routes = [
   {
     path: "/inventory",
     element: (
-      <RoleBasedRoute roles={["Admin", "Inventario", "Gerente"]}>
+      <RoleBasedRoute roles={["Admin", "Inventario"]}>
         <InventoryAdminPage />
       </RoleBasedRoute>
     ),
@@ -106,25 +106,26 @@ export const routes = [
   {
     path: "/ordersCustomers",
     element: (
-      // <RoleBasedRoute roles={["Admin", "Inventario"]}>
-      <OrdersCustomers />
-      // </RoleBasedRoute>
+      <PrivateRoute>
+        <OrdersCustomers />
+      </PrivateRoute>
     ),
   },
   {
     path: "/orders",
     element: (
-      <RoleBasedRoute roles={["User"]}>
+      <PrivateRoute>
         <OrdersPage />
-      </RoleBasedRoute>
+      </PrivateRoute>
     ),
   },
   {
-    path: "/adminHome",
+    path: "/admin",
     element: (
-      <RoleBasedRoute roles={["Admin", "Gerente", "Vendedor"]}>
+      <RoleBasedRoute roles={["Admin"]}>
         <AdminHomePage />
       </RoleBasedRoute>
     ),
   },
 ];
+

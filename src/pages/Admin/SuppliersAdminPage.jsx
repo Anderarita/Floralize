@@ -16,7 +16,6 @@ export const SuppliersAdminPage = () => {
   const fetchProveedores = async () => {
     try {
       const response = await api.get("/proveedor");
-      console.log("Proveedores:", response.data);
       setProveedores(response.data.data);
     } catch (error) {
       console.error("Error al obtener proveedores", error);

@@ -10,7 +10,7 @@ const Header = () => {
 
   // Log para ver la información del usuario
   useEffect(() => {
-    if (user) console.log("Usuario del backend:", user);
+    if (user);
   }, [user]);
 
   // Cierra el menú si se hace clic fuera de él
@@ -26,7 +26,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-[#9a5ea7] p-4 top-2  flex items-center justify-between w-full rounded-lg shadow-lg relative">
+    <header className="bg-[#9a5ea7] p-4 top-2  flex items-center justify-between w-full rounded-lg shadow-lg relative mb-4">
       <h1 className="text-white text-4xl font-bold font-dancing">Floralize</h1>
 
       <div className="relative" ref={menuRef}>

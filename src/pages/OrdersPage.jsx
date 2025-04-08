@@ -26,7 +26,6 @@ export const OrdersPage = () => {
       } catch (error) {
         console.error("Error al decodificar el token:", error);
       }
-      console.log(clienteId);
     }
   }, [token]);
 

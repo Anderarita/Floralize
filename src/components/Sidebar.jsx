@@ -35,9 +35,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const isAdmin = hasRole("Admin");
   const isUser = hasRole("User");
-  const isInvetori = hasRole("Inventario");
-  const isVendedor = hasRole("Vendedor");
-  const isGerente = hasRole("Gerente");
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -60,8 +57,8 @@ const Sidebar = () => {
   return (
     <div className="flex">
       <div
-        className={`bg-[#9a5ea7] p-5 pt-8 fixed top-2 left-2 bottom-2 z-50 rounded-lg transition-all duration-300 ease-in-out shadow-lg ${
-          open ? "w-56" : "w-20"
+        className={`bg-[#9a5ea7] p-1 pt-8 fixed top-2 left-2 bottom-2 z-50 rounded-lg transition-all duration-300 ease-in-out shadow-lg ${
+          open ? "w-56 px-4" : "w-14 px-2"
         } flex flex-col`}
       >
         <GoArrowLeft
@@ -77,14 +74,13 @@ const Sidebar = () => {
 
         <nav className="flex-grow mt-20">
           <ul>
-            
             <NavItem
               icon={<IoHomeOutline />}
-              onClick={() => handleNavigate("/adminHome")}
+              onClick={() => handleNavigate("/admin")}
               open={open}
               title={"Inicio"}
             />
-            {isAdmin || !isGerente && (
+            {!isAdmin && (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/orders")}
@@ -92,7 +88,7 @@ const Sidebar = () => {
                 title={"Pedidos"}
               />
             )}
-            {(hasRole("Admin") || hasRole("Vendedor")) && (
+            {!isUser && (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/OrdersAdmin")}
@@ -102,7 +98,7 @@ const Sidebar = () => {
             )}
 
             {/* Mostrar el elemento de inventario solo si el usuario tiene el rol de Admin o Inventario */}
-            {(hasRole("Admin") || hasRole("Inventario") || hasRole("Gerente")) && (
+            {(hasRole("Admin") || hasRole("Inventario")) && (
               <NavItem
                 icon={<GoFile />}
                 onClick={() => handleNavigate("/inventory")}
@@ -111,7 +107,7 @@ const Sidebar = () => {
               />
             )}
 
-            { isUser && (
+            {!isAdmin && (
               <NavItem
                 icon={<GoPerson />}
                 onClick={() => handleNavigate("/ordersCustomers")}
@@ -129,7 +125,7 @@ const Sidebar = () => {
                 />
               </>
             )}
-            {(hasRole("Admin") || hasRole("Inventario")) && (
+            {isAdmin && (
               <NavItem
                 icon={<FaHandshake />}
                 onClick={() => handleNavigate("/Suppliers")}
