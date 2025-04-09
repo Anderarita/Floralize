@@ -35,6 +35,9 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const isAdmin = hasRole("Admin");
   const isUser = hasRole("User");
+  const isVendedor = hasRole("Vendedor");
+  const isGerente = hasRole("Gerente");
+  const isInventario = hasRole("Inventario");
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -80,7 +83,7 @@ const Sidebar = () => {
               open={open}
               title={"Inicio"}
             />
-            {!isAdmin && (
+            {!isAdmin && !isVendedor && !isGerente && !isInventario && (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/orders")}
@@ -88,7 +91,7 @@ const Sidebar = () => {
                 title={"Pedidos"}
               />
             )}
-            {!isUser && (
+            {(isVendedor || isAdmin) && (
               <NavItem
                 icon={<GoCalendar />}
                 onClick={() => handleNavigate("/OrdersAdmin")}
@@ -98,7 +101,7 @@ const Sidebar = () => {
             )}
 
             {/* Mostrar el elemento de inventario solo si el usuario tiene el rol de Admin o Inventario */}
-            {(hasRole("Admin") || hasRole("Inventario")) && (
+            {(hasRole("Admin") || hasRole("Inventario") || hasRole("Gerente")) && (
               <NavItem
                 icon={<GoFile />}
                 onClick={() => handleNavigate("/inventory")}
@@ -107,7 +110,7 @@ const Sidebar = () => {
               />
             )}
 
-            {!isAdmin && (
+            {!isAdmin && !isVendedor && !isGerente && !isInventario && (
               <NavItem
                 icon={<GoPerson />}
                 onClick={() => handleNavigate("/ordersCustomers")}
@@ -125,7 +128,7 @@ const Sidebar = () => {
                 />
               </>
             )}
-            {isAdmin && (
+            {(isAdmin || isInventario) && (
               <NavItem
                 icon={<FaHandshake />}
                 onClick={() => handleNavigate("/Suppliers")}

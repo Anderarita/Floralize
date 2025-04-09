@@ -16,7 +16,7 @@ export default function RoleBasedRoute({ children, roles }) {
   const hasRequiredRole = roles.some((role) => hasRole(role));
 
   if (!hasRequiredRole) {
-    if (hasRole("Admin")) {
+    if (hasRole("Admin") || hasRole("Vendedor") || hasRole("Gerente")) {
       return <Navigate to="/admin" />;
     }
     return <Navigate to="/" />;
